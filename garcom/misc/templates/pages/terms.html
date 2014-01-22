@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load i18n  %}
+
+{% block ng-app %}ng-app="garage"{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/vehicle/js/app.js"></script>
+{% endblock %}
+
+{% block title %}Terms of Service - {{ block.super }}{% endblock %}
+
+{% block content %}
+
+    <section>
+        <div class="page-header">
+            <h1>Terms of Service</h1>
+        </div>
+
+    </section>
+
+
+{% endblock %}
+

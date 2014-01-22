@@ -1,0 +1,10 @@
+{% load i18n %}
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans 'Administration' %}<b class="caret"></b></a>
+    <ul class="dropdown-menu">
+
+        <li><a href="/admin/">{% trans 'Back office' %}</a></li>
+        <li><a href="{% url vehicle-approve %}">{% trans 'Approve vehicles' %}</a></li>
+
+    </ul>
+</li>

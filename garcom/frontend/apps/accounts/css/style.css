@@ -1,0 +1,23 @@
+.primary-phone {
+    text-align: center;
+}
+
+.payment-card {
+    position: relative;
+}
+
+.delete-payment-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.glow-effect {
+    -webkit-box-shadow: 0px 0px 5px #eee;
+    -moz-box-shadow: 0px 0px 5px #eee;
+    box-shadow: 0px 0px 5px #eee;
+}
+
+.post-your-car-btn {
+    margin: 0px 0px 10px 0px;
+}

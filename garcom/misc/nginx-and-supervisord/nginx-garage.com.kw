@@ -1,0 +1,16 @@
+server {
+        listen 80;
+        server_name domain_name;
+        access_log /home/ubuntu/garenv/logs/access.garage.com.log;
+	error_log /home/ubuntu/garenv/logs/error.garage.com.log;
+        location /static {
+                root /home/ubuntu/garenv/garage/;
+        }
+	location / {
+		try_files $uri @uwsgi;
+	}
+	location @uwsgi {
+    		include uwsgi_params;
+    		uwsgi_pass unix:/tmp/garage_uwsgi.sock;
+	}
+}

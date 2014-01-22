@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load add_class i18n %}
+
+{% block ng-app %}ng-app="register"{% endblock %}
+
+{% block title %}Register - {{ block.super }}{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/accounts/js/services.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/accounts/js/directives.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/accounts/js/controllers.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/accounts/js/app.js"></script>
+{% endblock %}
+
+
+{% block css %}
+    {{ block.super }}
+
+{% endblock %}
+
+
+
+{% block content %}
+    <div class="row">
+        <div class="span12">
+            <div class="page-header">
+                <h1>{% trans 'Registration' %} <small>{% trans 'directly or using a social network.' %}</small></h1>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span6">
+
+        {% for message in messages %}
+            {% if message.tags == 'error' %}
+                <div class="alert alert-error">{{ message }}</div>
+            {% endif %}
+            {% if message.tags == 'success' %}
+                <div class="alert alert-info">{{ message }}</div>
+            {% endif %}
+        {% endfor %}
+
+        <form class="form-horizontal" action="{% url accounts-register %}" method="post">
+
+            {% if form.errors %}
+            <div class="alert alert-error">
+                <a class="close" data-dismiss="alert" href="#">&times;</a>
+                {{ form.non_field_errors }}
+                {% for field in form %}
+                    {{ field.errors }}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% csrf_token %}
+
+            <fieldset>
+
+                {# Include the hidden fields #}
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+
+                {# Include the visible fields #}
+                {% for field in form.required_fields %}
+                    <div class="control-group {% if field.errors %}error{% endif %}">
+                        {{ field.label_tag|add_class:'control-label' }}
+                        <div class="controls">
+                            {{ field }}
+                        </div>
+                        <span class="help-block">{{ field.help_text }}</span>
+                    </div>
+                {% endfor %}
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-large">{% trans 'Register' %}</button>
+                    <button type="button" class="btn btn-danger btn-large">{% trans 'Clear' %}</button>
+                </div>
+            </fieldset>
+        </form>
+
+        </div>
+        <div class="span6 align-center">
+
+                <a  href="{% url socialauth_begin 'google' %}?{{ redirect_querystring }}"><img src="{{ STATIC_URL }}apps/accounts/images/google_128.png" /></a>
+                <a  href="{% url socialauth_begin 'facebook' %}?{{ redirect_querystring }}"><img src="{{ STATIC_URL }}apps/accounts/images/facebook_128.png" /></a>
+                <a  href="{% url socialauth_begin 'linkedin' %}?{{ redirect_querystring }}"><img src="{{ STATIC_URL }}apps/accounts/images/linkedin_128.png" /></a>
+
+
+        </div>
+    </div>
+
+{% endblock %}

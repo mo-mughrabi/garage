@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load add_class i18n %}
+
+{% block ng-app %}ng-app="login"{% endblock %}
+
+{% block title %}Login - {{ block.super }}{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/accounts/js/services.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/accounts/js/directives.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/accounts/js/controllers.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/accounts/js/app.js"></script>
+{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{{ STATIC_URL }}apps/accounts/css/style.css" type="text/css" />
+{% endblock %}
+
+
+
+{% block content %}
+    <div class="row">
+        <div class="span12">
+            <div class="page-header">
+                <h1>{% trans 'Login' %} <small>{% trans 'directly or using a social network.' %}</small></h1>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span6">
+
+        {% for message in messages %}
+            {% if message.tags == 'error' %}
+                <div class="alert alert-error">{{ message }}</div>
+            {% endif %}
+            {% if message.tags == 'success' %}
+                <div class="alert alert-info">{{ message }}</div>
+            {% endif %}
+        {% endfor %}
+
+        <form class="form-horizontal" method="post" action="{% url accounts-login %}">
+            {% csrf_token %}
+
+            <fieldset>
+                <div class="control-group {% if form.email.errors %}error{% endif %}">
+                    {{ form.email.label_tag|add_class:'control-label' }}
+                    <div class="controls">
+                        {{ form.email|add_class:'input-xlarge' }}
+                    </div>
+                </div>
+
+                <div class="control-group {% if form.password.errors %}error{% endif %}">
+                    {{ form.password.label_tag|add_class:'control-label' }}
+                    <div class="controls">
+                        {{ form.password|add_class:'input-xlarge' }}
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    {{ form.next }}
+                    <button type="submit" class="btn btn-primary">{% trans 'Login' %}</button>
+
+                    <br /><br />
+
+                    <a href="{% url accounts-register %}">{% trans 'Register a new account' %}</a><br />
+                    <a href="{% url accounts-recovery %}">{% trans 'Account recovery' %}</a>
+                </div>
+            </fieldset>
+        </form>
+
+        </div>
+        <div class="span6 align-center" ng-controller="LoginController">
+
+                <a  class="social" href="{% url socialauth_begin 'google' %}?{{ redirect_querystring }}"><img src="{{ STATIC_URL }}apps/accounts/images/google_128.png" /></a>
+                <a  class="social" href="{% url socialauth_begin 'facebook' %}?{{ redirect_querystring }}"><img src="{{ STATIC_URL }}apps/accounts/images/facebook_128.png" /></a>
+                <a  class="social" href="{% url socialauth_begin 'linkedin' %}?{{ redirect_querystring }}"><img src="{{ STATIC_URL }}apps/accounts/images/linkedin_128.png" /></a>
+
+        </div>
+    </div>
+
+{% endblock %}

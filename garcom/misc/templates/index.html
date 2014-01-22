@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+{% load i18n vehicle_utils add_class angularjs %}
+
+{% block ng-app %}ng-app="home"{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+
+    {% if LANGUAGE_BIDI %}
+        <link href="{{ STATIC_URL }}apps/vehicle/css/style-rtl.css" rel="stylesheet" />
+    {% else %}
+        <link href="{{ STATIC_URL }}apps/vehicle/css/style.css" rel="stylesheet" />
+    {% endif %}
+
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/vehicle/js/services/model-lookup.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/vehicle/js/services/posts.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/vehicle/js/controllers/browse.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/vehicle/js/controllers/posts.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/vehicle/js/directives/browse.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/vehicle/js/app.js"></script>
+{% endblock %}
+
+{% block content %}
+
+    <div ng-view></div>
+
+    <div class="row min-height-container">
+
+        <div class="span3">
+            <div ng-controller="BrowseCtrl" data-spy="affix" id="browse" data-offset-bottom="120">
+
+                <form class="form-vertical" method="post" action="#">
+                    <fieldset>
+                        <div class="control-group">
+                            <label class="control-label" for="id_model">{% trans 'Make' %}</label>
+                            <div class="controls">
+                                <select class="dropdown" id="id_make"
+                                        ng-model="make"
+                                        ng-options="make.make as make.display for make in makes"
+                                        ng-change="makeChange()">
+                                    <option value="">{% trans 'All' %}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="id_model">
+                                {% trans 'Model' %}
+                                <span ng-switch on="modelsLoading" >
+                                    <span ng-switch-when="loading">
+                                            <img src="{{ STATIC_URL }}apps/base/img/ajax-loader-blue-16x-16x.gif" alt="" />
+                                    </span>
+                                </span>
+                            </label>
+
+                            <div class="controls">
+                                <select class="dropdown" id="id_model"
+                                        ng-model="model"
+                                        ng-disabled="!models.length"
+                                        ng-options="model.model as model.display for model in models"
+                                        ng-change="modelChange()">
+                                    <option value="">{% trans 'All' %}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="id_trim">
+                                {% trans 'Trim' %}
+                                <span ng-switch on="trimsLoading" >
+                                    <span ng-switch-when="loading">
+                                            <img src="{{ STATIC_URL }}apps/base/img/ajax-loader-blue-16x-16x.gif" alt="" />
+                                    </span>
+                                </span>
+                            </label>
+                            <div class="controls">
+                                <select class="dropdown" id="id_trim"
+                                        ng-model="trim"
+                                        ng-disabled="!trims.length"
+                                        ng-options="trim.trim as trim.display for trim in trims"
+                                        ng-change="trimChange()">
+                                    <option value="">{% trans 'All' %}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="id_year_from">{% trans 'Year' %}</label>
+                            <div class="controls">
+                                <select class="dropdown year-dropdown" id="id_year_from"
+                                        ng-model="yearFrom"
+                                        ng-options="year as year for year in years"
+                                        ng-change="applyFilter()">
+                                    <option value="">{% trans 'All' %}</option>
+                                </select>
+                                <span> - </span>
+                                <select class="dropdown year-dropdown" id="id_year_to"
+                                        ng-model="yearTo"
+                                        ng-options="year as year for year in years"
+                                        ng-change="applyFilter()">
+                                    <option value="">{% trans 'All' %}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="id_price_from">{% trans 'Price' %} ({% trans 'KWD' %})</label>
+                            <div class="controls">
+                                <input type="text" maxlength="12" name="priceFrom" class="price-textbox" placeholder="From" id="id_price_from" ng-model="priceFrom" ng-change="applyFilter()" />
+                                <span> - </span>
+                                <input type="text" maxlength="12" name="priceTo" class="price-textbox" placeholder="To" id="id_price_to" ng-model="priceTo" ng-change="applyFilter()" />
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="id_mileage_from">{% trans 'Mileage' %} ({% trans 'KM' %})</label>
+                            <div class="controls">
+                                <input type="text" maxlength="12" name="mileageFrom" class="mileage-textbox" placeholder="From" id="id_mileage_from" ng-model="mileageFrom" ng-change="applyFilter()" />
+                                <span> - </span>
+                                <input type="text" maxlength="12" name="mileageTo" class="mileage-textbox" placeholder="To" id="id_mileage_to" ng-model="mileageTo" ng-change="applyFilter()" />
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="id_condition">{% trans 'Condition' %}</label>
+                            <div class="controls">
+                                <select class="dropdown" id="id_condition" ng-model="condition" ng-change="applyFilter()">
+                                    <option value="">{% trans 'All' %}</option>
+                                    <option value="N">{% trans 'New' %}</option>
+                                    <option value="U">{% trans 'Used' %}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="id_color">{% trans 'Color' %}</label>
+                            <div class="controls">
+                                <select class="dropdown" id="id_color"
+                                        ng-model="color"
+                                        ng-options="color.id as color.value for color in colors"
+                                        ng-change="applyFilter()">
+                                    <option value="">{% trans 'All' %}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </form>
+
+            </div>
+            <div>&nbsp;</div>
+        </div>
+
+
+        <div class="span9" id="vehicle-listing" ng-controller="PostsCtrl">
+
+            <div id="posts-toolbar" ng-show="!!cars.length">
+
+
+                <div class="btn-group" id="posts-layout" ng-model="postsLayout" bs-buttons-radio >
+                    <button type="button" class="btn" value="stacked" title="Detailed Listings"><i class="icon-align-justify"></i></button>
+                    <button type="button" class="btn" value="tiles" title="Tiles"><i class="icon-th"></i></button>
+                </div>
+
+                <form class="form-inline" id="sort-dropdown">
+                    <label class="control-label" for="id_sort">{% trans 'Sort by' %}</label>
+                    <select class="dropdown" id="id_sort" ng-model="sort" ng-change="applyFilter()">
+                        <option value="-created_at">{% trans 'Most Recent' %}</option>
+                        <option value="-model__year">{% trans 'Year: Newest' %}</option>
+                        <option value="model__year">{% trans 'Year: Oldest' %}</option>
+                        <option value="asking_price">{% trans 'Price: Low to High' %}</option>
+                        <option value="-asking_price">{% trans 'Price: High to Low' %}</option>
+                        <option value="mileage">{% trans 'Mileage: Low to High' %}</option>
+                        <option value="-mileage">{% trans 'Mileage: High to Low' %}</option>
+                    </select>
+                </form>
+
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="row" id="vehicle-items" data-state="{% ng state %}">
+
+                <div ng-repeat="car in cars">
+                    <div class="span9 post" ng-class="postsLayout">
+                        <div class="vehicle-thumbnail">
+                            <img class="img-polaroid" ng-src="{% ng car.thumbnail %}" alt="" />
+                            <div ng-switch="car.status">
+                                <div ng-switch-when="S">
+                                    <span class="dark-layer">
+                                        <span class="vehicle-sold-text">
+                                            Sold
+                                        </span>
+                                    </span>
+                                </div>
+                                <div ng-switch-when="P">
+                                    <span class="dark-layer">
+                                        <span class="vehicle-pending-text">
+                                            Pending Approval
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="infobox" ng-class="postsLayout">
+                            <h4 class="title"><a href="{% ng car.url %}">{% ng car.model_display.make_display %} {% ng car.model_display.model_display %} {% ng car.model_display.trim_display %}</a></h4>
+                            <small class="muted post-summary">{% trans 'published ' %} {% ng car.created_since %} {% trans 'ago with' %} {% ng car.view_count %} {% trans 'views' %}</small>
+                            <dl>
+                                <dt>{% trans 'Year' %}</dt>
+                                <dd>{% ng car.year %}</dd>
+                                <dt>{% trans 'Price' %}</dt>
+                                <dd>{% ng car.asking_price | number:0 %} {% trans 'KWD' %}</dd>
+                                <dt>{% trans 'Mileage' %}</dt>
+                                <dd>{% ng car.mileage | number:0 %} {% trans 'KM' %}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="row" ng-switch on="state" >
+                <div ng-switch-when="loading">
+                    <div class="align-center">
+                        <img src="{{ STATIC_URL }}apps/base/img/ajax-loader-blue-large.gif" alt="" />
+                    </div>
+                </div>
+
+                <div ng-switch-default>
+                    <div class="align-center">
+                        <a class="btn btn-large" ng-click="loadMore()" ng-show="page_has_next">{% trans 'Load More...' %}</a>
+                        <h4 class="muted" ng-show="!page_has_next">{% trans 'All items loaded.' %}</h4>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+{% endblock %}
+

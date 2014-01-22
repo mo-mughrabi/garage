@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load i18n  %}
+
+{% block ng-app %}ng-app="garage"{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/vehicle/js/app.js"></script>
+{% endblock %}
+
+{% block title %}Contact Us - {{ block.super }}{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="span3">
+
+            <h3>{% trans 'Get in touch' %}</h3>
+            <p>
+                {% trans 'Get in touch with us and learn about all our services.' %}
+            </p>
+
+        </div>
+        <div class="span9">
+            {% if form %}
+            <h3>{% trans 'Contact us form' %}</h3>
+            <form method="post" action="">
+                {% csrf_token %}
+                <div class="control-group">
+                    <div class="controls">
+                        {{ form }}
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="controls">
+                        <input type="submit" value="{% trans 'Send' %}" class="btn btn-large" onclick="submit()" />
+                    </div>
+                </div>
+            </form>
+            {% else %}
+               <div class="hero-unit">
+                    <h2>{% trans 'Thank you for contacting us, your message has been sent to our staff' %}</h2>
+               </div>
+            {% endif %}
+
+
+
+        </div>
+    </div>
+
+
+{% endblock %}
+

@@ -1,0 +1,26 @@
+{% extends "accounts/profile.html" %}
+
+{% load add_class i18n %}
+
+{% block ng-app %}ng-app="profile"{% endblock %}
+
+{% block title %}User Account - {{ block.super }}{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+{% endblock %}
+
+{% block profile_page_content %}
+
+        <h3>{% trans 'Welcome' %} {{ user.first_name }},</h3>
+
+        <p>
+            {% blocktrans %}
+            Please update your contacts and privacy settings, or go directly to the
+            {% endblocktrans %}
+            <a href="{% url vehicle-index %}">{% trans 'main page' %}</a>
+            {% blocktrans %} to see the latest posts.{% endblocktrans %}
+
+        </p>
+
+{% endblock %}

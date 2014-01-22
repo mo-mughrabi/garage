@@ -1,0 +1,7 @@
+form#vehicle-model-lookup-suggest {
+    margin: 0px;
+}
+
+form#vehicle-model-lookup-suggest div.alert ul {
+    margin-bottom: 0px;
+}

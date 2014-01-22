@@ -1,0 +1,12 @@
+{% load i18n %}
+{% trans 'Hello' %} {{ user }},
+
+{% blocktrans %}
+    Allow us to thank you for signing up at Garage. You are now an active member of our community, you can continue using Garage and post your vehicles.
+{% endblocktrans %}
+
+
+{% blocktrans %}
+    Best wishes
+    Garage family
+{% endblocktrans %}

@@ -1,0 +1,9 @@
+*.pyc
+.idea
+env.py
+local_*.py
+*.DS_Store
+public_media/*
+static/*
+celerybeat-schedule
+celerybeat-schedule.db

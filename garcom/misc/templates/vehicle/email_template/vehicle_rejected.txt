@@ -1,0 +1,8 @@
+{% load i18n %}
+{% trans 'Dear' %} {{ user }},
+
+{% trans 'We are sorry to inform you that your post request has been rejected.' %}
+
+{% trans 'Thank you for your interest in Garage.' %}
+{% trans 'Garage Team' %}
+

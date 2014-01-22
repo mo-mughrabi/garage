@@ -1,0 +1,243 @@
+.year-dropdown {
+    width: 103px;
+}
+
+.price-textbox,
+.mileage-textbox {
+    width: 89px;
+}
+
+#posts-toolbar {
+    padding: 0px 10px 15px 0px;
+}
+
+#posts-toolbar #sort-dropdown,
+#posts-toolbar #posts-layout {
+    margin-left: 5px;
+    float: right;
+}
+
+#vehicle-items .post {
+    display: block;
+    float: left;
+    margin-top: -5px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    padding: 5px;
+}
+
+#vehicle-items .post.tiles {
+    width: auto;
+    height: 138px;
+    margin-right: 0px;
+}
+
+#vehicle-items .post .vehicle-thumbnail {
+    min-width: 210px;
+    float: left;
+    position: relative;
+}
+
+#vehicle-items .post .vehicle-thumbnail img {
+    min-width: 200px;
+}
+
+#vehicle-items .post .vehicle-thumbnail span.dark-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(0, 0, 0); /* fallback color */
+    background: rgba(0, 0, 0, 0.7);
+}
+
+#vehicle-items .post .vehicle-thumbnail span.dark-layer .vehicle-sold-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -20px;
+    margin-left: -25px;
+    color: white;
+    font: bold 24px/45px Helvetica, Sans-Serif;
+    letter-spacing: -1px;
+    text-align: center;
+}
+
+#vehicle-items .post .vehicle-thumbnail span.dark-layer .vehicle-pending-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -20px;
+    margin-left: -75px;
+    color: white;
+    font: 20px/45px Helvetica, Sans-Serif;
+    letter-spacing: -1px;
+    text-align: center;
+}
+
+#vehicle-items .post .infobox {
+    float: left;
+    padding-left: 5px;
+    clear:right;
+}
+
+#vehicle-items .post .infobox.tiles {
+    display: none;
+}
+
+#vehicle-items .post .infobox .title {
+    margin: 0px 0px 0px 0px;
+    clear:right;
+}
+
+#vehicle-items .post .infobox .title a {
+    text-decoration: none;
+}
+
+#vehicle-items .post .infobox .title a:hover {
+    text-decoration: underline;
+}
+
+/*.vehiclepost .infobox .post-summary::before {
+    content: '— \00A0';
+}*/
+
+#vehicle-items .post .infobox dl {
+    margin-top: 5px;
+}
+
+#vehicle-items .post .infobox dl dt {
+    float:left;
+    clear:left;
+    width:80px;
+    text-align:right;
+}
+
+#vehicle-items .post .infobox dl dd {
+    margin-left:90px;
+}
+
+.min-height-container {
+    min-height: 750px;
+}
+
+#header-seperator hr {
+    /*color: #29A3CC;
+    background-color: #29A3CC;*/
+    height: 2px;
+    margin-top: 0px;
+    margin-bottom: 2px;
+}
+
+.imagebox iframe {
+    margin: 3px 0px;
+}
+
+#contact-owner-btn {
+    width: 93%;
+    margin: 10px 0px;
+}
+
+.infobox dl dt {
+    float:left;
+    clear:left;
+    width:80px;
+    text-align:right;
+}
+
+.infobox dl dd {
+    margin-left:90px;
+}
+
+.affix-top {
+    position: fixed;
+    top: 20px;
+    left: 0px;
+}
+
+#browse.affix-bottom {
+    position: absolute;
+    bottom: 120px;
+}
+
+/*  media width
+    Large:    >= 1200
+    Default:  >= 980
+    Tablet (Portrait): >= 768
+    Phone to Tablet:   <= 767
+    Phone:    <= 480px
+ */
+@media (min-width: 980px) and (max-width: 1199px) {
+    #vehicle-listing {
+        margin-left: 280px;
+    }
+
+    #vehicle-items .post.tiles {
+        margin-right: 15px;
+        margin-bottom: 17px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 979px) {
+    #posts-layout {
+        display: none;
+    }
+
+    #vehicle-listing {
+        margin-left: 280px;
+        max-width: 480px;
+    }
+
+    #vehicle-items .post {
+        max-width: 480px;
+    }
+}
+
+@media (max-width: 767px) {
+    #browse {
+        position: static;
+        width: auto;
+        top: 0;
+    }
+
+    #posts-layout {
+        display: none;
+    }
+
+    #browse select {
+        width: 100%;
+    }
+
+    #browse select#id_year_from,
+    #browse select#id_year_to {
+        width: 47%;
+    }
+
+    #browse input#id_price_from,
+    #browse input#id_price_to,
+    #browse input#id_mileage_from,
+    #browse input#id_mileage_to {
+        width: 43%;
+    }
+}
+
+@media (max-width: 480px) {
+    form#sort-dropdown,
+    form#sort-dropdown label,
+    form#sort-dropdown select{
+        width: 100%;
+    }
+
+    #vehicle-items .post .vehicle-thumbnail {
+        width: 100%;
+        clear: both;
+        text-align: center;
+    }
+
+    #vehicle-items .post .vehicle-thumbnail img {
+        width: 95%;
+        margin-bottom: 5px;
+    }
+}

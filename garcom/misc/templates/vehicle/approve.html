@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% load i18n vehicle_utils angularjs %}
+
+{% block ng-app %}ng-app="admin"{% endblock %}
+
+{% block title %}Vehicle Approval - {{ block.super }}{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+    <link href="{{ STATIC_URL }}apps/vehicle/css/style.css" rel="stylesheet" />
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/vehicle/js/services/model-lookup.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/vehicle/js/services/posts.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/vehicle/js/controllers/admin.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/vehicle/js/app.js"></script>
+{% endblock %}
+
+{% block content %}
+<div ng-controller="AdminCtrl">
+    <!-- MODAL from bootstrap starts here -->
+    <div class="modal hide" id="model-translation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <form method="POST" id="model-translation-form">
+            {% csrf_token %}
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{% trans 'Translate this bitch' %}</h3>
+            </div>
+            <div class="modal-body">
+
+                <ul class="nav nav-tabs">
+                    {% get_language_info_list for LANGUAGES as languages %}
+                    {% for language in languages %}
+                        <li><a data-toggle="tab" href="#{{ language.code }}">{{ language.name_local }} ({{ language.code }})</a></li>
+                    {% endfor %}
+                </ul>
+
+
+                <div class="tab-content">
+                {% for language in languages %}
+
+
+                    <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ language.code }}">
+
+                        <label>{% trans 'viewing language' %} {{ language.name }}</label>
+                        <div class="controls">
+                            <input type="text" name="make" placeholder="make field" class="span2" />
+                            <input type="text" name="model" placeholder="model field" class="span2" />
+                            <input type="text" name="trim" placeholder="trim field" class="span2" />
+                            <button class="btn btn-mini">Google translate</button>
+                        </div>
+
+                    </div>
+
+
+                {% endfor %}
+                </div>
+
+                <div class="control-group">
+                    <label>{% trans 'Apply to all similar?' %}</label>
+                    <div class="controls">
+                        <input type="checkbox" name="apply_to_all" placeholder="Text to be translated" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{% trans 'Close' %}</button>
+                <button class="btn btn-primary" name="save">{% trans 'Save and continue' %}</button>
+            </div>
+        </form>
+    </div>
+    <!-- MODAL from bootstrap ends here -->
+
+
+    <form method="POST" action="#">
+    <div class="row">
+        <div class="span3">
+            <div data-spy="affix" >
+
+                <select name="action">
+                    <option value="A">{% trans 'Approve' %}</option>
+                    <option value="R">{% trans 'Reject' %}</option>
+                </select>
+
+                <br/>
+
+                <button class="btn" ng-disabled="!cars" type="submit">{% trans 'Save' %}</button>
+
+            </div>
+        </div>
+        <div class="span9">
+
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    <a class="close" data-dismiss="alert" href="#">&times;</a>
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+            {% csrf_token %}
+
+            <div ng-switch="cars.length">
+                <div ng-switch-when="0">
+                    <h3>{% trans 'No vehicle to approve' %}</h3>
+                </div>
+
+                <div ng-switch-default>
+                    <table class="table table-bordered" ng-show="cars">
+                        <caption>{% trans 'Vehicle Administration' %}</caption>
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>{% trans 'Model' %}</th>
+                            <th>{% trans 'Year' %}</th>
+                            <th>{% trans 'Price' %}</th>
+                            <th>{% trans 'Milage' %}</th>
+                            <th>{% trans 'Created by' %}</th>
+                            <th>{% trans 'Created at' %}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr ng-repeat="car in cars">
+
+                            <td>
+
+                                <input type="checkbox" ng-hide="car.available_i18n_models==0" ng-disabled="car.available_i18n_models==0" name="cars" value="{% ng car.id %}" />
+                                <a ng-hide="car.available_i18n_models==1" target="_blank" ng-href="/admin/vehicle/modellookup/{% ng car.model %}/">{% trans 'fix it' %}</a>
+
+                            </td>
+
+                            <td>
+                                <a target="_blank" ng-href="{% ng car.get_absolute_url %}">
+                                    {% ng car.model_display.make_display %}
+                                    {% ng car.model_display.model_display %}
+                                    {% ng car.model_display.trim_display %}
+                                </a>
+                            </td>
+                            <td>
+                                {% ng car.year %}
+                            </td>
+                            <td>
+                                {% ng car.asking_price %}
+                            </td>
+                            <td>
+                                {% ng car.mileage %}
+                            </td>
+                            <td>
+                                <a href="#"></a>
+                            </td>
+                            <td>
+                                {% ng car.created_since %} ago
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </form>
+</div>
+{% endblock %}
+

@@ -1,0 +1,10 @@
+{% load i18n %}
+{% trans 'Dear' %} {{ user }},
+
+
+{% trans 'Your vehicle is saved in our database and being reviewed for approval. Once it is approved, you will receive an email with confirmation and details of your post.' %}
+
+
+{% trans 'Thank you for using garage' %}
+{% trans 'Garage team' %}
+

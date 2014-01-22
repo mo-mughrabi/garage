@@ -1,0 +1,14 @@
+{% load i18n %}
+{% trans 'Hello' %} {{ user }},
+
+{% blocktrans %}
+    Allow us to thank you for visiting Garage and registering with us. Please click the following link to activate your account.
+
+    {{ protocol }}://{{ domain }}{{ activation_link }}
+{% endblocktrans %}
+
+
+{% blocktrans %}
+    Best wishes
+    Garage family
+{% endblocktrans %}

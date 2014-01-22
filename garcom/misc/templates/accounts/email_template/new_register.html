@@ -1,0 +1,13 @@
+{% load i18n %}
+{% trans 'Hello' %} {{ user }},
+<br />
+<br />
+{% blocktrans %}
+    <p>Allow us to thank you for visiting Garage and registering with us. Please <a href="{{ protocol }}://{{ domain }}{{ activation_link }}">click</a> the following link to activate your account.</p>
+{% endblocktrans %}
+
+<br />
+{% blocktrans %}
+    Best wishes <br />
+    Garage family
+{% endblocktrans %}

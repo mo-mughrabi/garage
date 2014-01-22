@@ -1,0 +1,69 @@
+{% extends "accounts/profile.html" %}
+
+{% load add_class i18n %}
+
+{% block ng-app %}ng-app="profile"{% endblock %}
+
+{% block title %}Profile Payments - {{ block.super }}{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+{% endblock %}
+
+{% block profile_page_content %}
+
+        <div class="page-header">
+            <h1>{% trans 'Payment' %} <small>{% trans 'store your preferred payment & post vehicles instantly.' %}</small></h1>
+        </div>
+
+        {% for message in messages %}
+            {% if message.tags == 'error' %}
+                <div class="alert alert-error">{{ message }}</div>
+            {% else %}
+                {% if message.tags == 'success' %}
+                    <div class="alert alert-success">{{ message }}</div>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+
+        <form action="{% url accounts-profile-payment %}" method="post">
+            {% csrf_token %}
+
+            {{ PaymentsForm.management_form }}
+
+            <div class="row">
+                {% for form in PaymentsForm %}
+
+                    <fieldset class="span3">
+                        <div class="well payment-card {% if form.instance.pk and form.instance == profile.primary_payment %}primary-payment-card{% endif %}"">
+                            {{ form.id }}
+                            {{ form.type|add_class:'dropdown' }}
+                            <br />
+                            {{ form.number|add_class:'payment-number' }}
+                            {% if form.instance.pk and form.instance != profile.primary_payment %}
+                                <div class="delete-payment-icon">
+                                    <a href="{% url accounts-profile-del-payment delete_payment=form.instance.pk %}">
+                                        <i class="icon-remove"></i>
+                                    </a>
+                                </div>
+                            {% endif %}
+                            <div class="clearfix"></div>
+                        </div>
+                    </fieldset>
+
+                {% endfor %}
+
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn">{% trans 'Update' %}</button>
+            </div>
+
+        </form>
+
+
+{% endblock %}

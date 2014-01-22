@@ -1,0 +1,8 @@
+[program:garage]
+command=/usr/local/bin/uwsgi -s /tmp/garage_uwsgi.sock -w garcom.wsgi:application  -H /home/ubuntu/garenv --chmod-socket 666
+directory=/home/ubuntu/garenv/garage
+autostart=true
+autorestart=true
+stdout_logfile=/home/ubuntu/garenv/logs/uwsgi.log
+redirect_stderr=true
+stopsignal=QUIT

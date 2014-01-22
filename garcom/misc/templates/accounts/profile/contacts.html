@@ -1,0 +1,89 @@
+{% extends "accounts/profile.html" %}
+{% load add_class i18n %}
+
+{% block ng-app %}ng-app="profile"{% endblock %}
+
+{% block title %}Profile Contacts - {{ block.super }}{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{{ STATIC_URL }}apps/accounts/css/style.css" type="text/css" />
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+{% endblock %}
+
+{% block profile_page_content %}
+
+        <div class="page-header">
+            <h1>{% trans 'Contacts' %} <small>{% trans 'maintain your phone numbers to be reached easier.' %}</small></h1>
+        </div>
+
+
+        {% for message in messages %}
+            {% if message.tags == 'error' %}
+                <div class="alert alert-error">{{ message }}</div>
+            {% else %}
+                {% if message.tags == 'success' %}
+                    <div class="alert alert-success">{{ message }}</div>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+
+        <form class="form-vertical" action="{% url accounts-profile-contacts %}" method="post">
+
+            {% if formset.errors %}
+                <div class="alert alert-error">
+                    <a class="close" data-dismiss="alert" href="#">&times;</a>
+                    {{ formset.non_field_errors }}
+                    {% for form in formset %}
+                        {% for field in form %}
+                            {{ field.errors }}
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% csrf_token %}
+
+
+            {{ formset.management_form }}
+
+            {% for form in formset %}
+                {{ form.id }}
+
+                    <fieldset class="control-group {% if form.errors %}error{% endif %}">
+                        <div class="span2 primary-phone">
+                            {% if form.instance.pk %}
+                                {% if form.instance == profile.primary_phone %}
+                                    <strong>{% trans 'Primary' %}</strong>
+                                {% else %}
+                                    <a class="btn btn-mini btn-inverse" href="{% url accounts-profile-contact-make-primary make_primary=form.instance.pk %}">Make Primary</a>
+                                {% endif %}
+                            {% else %}
+                                &nbsp;
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            {{ form.type|add_class:'input-xlarge span2' }}
+                            &nbsp;
+                            {{ form.number|add_class:'input-xlarge span3' }}
+
+                            {% if form.instance.pk and form.instance != profile.primary_phone %}
+                                &nbsp;
+                                <a href="{% url accounts-profile-contact-delete delete_phone=form.instance.pk %}"><i class="icon-remove"></i></a>
+                            {% endif %}
+                        </div>
+                    </fieldset>
+
+            {% endfor %}
+
+            <div class="form-actions align-center">
+                <button type="submit" class="btn">{% trans 'Update' %}</button>
+            </div>
+
+        </form>
+
+{% endblock %}

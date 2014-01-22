@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load i18n  %}
+
+{% block ng-app %}ng-app="garage"{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/vehicle/js/app.js"></script>
+{% endblock %}
+
+{% block title %}Page 404 - {{ block.super }}{% endblock %}
+
+{% block content %}
+
+    <div class="hero-unit">
+        <h2>{% trans '404 - Page not found' %}</h2>
+        <hr/>
+        <p>
+            <h5>{{ request.build_absolute_uri }}</h5>
+            {% trans 'This page is not the web page you are looking for.' %}
+        </p>
+    </div>
+
+
+{% endblock %}
+

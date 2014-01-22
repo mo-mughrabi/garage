@@ -1,0 +1,261 @@
+{% extends "base.html" %}
+
+{% load add_class i18n upload_tags angularjs %}
+
+{% block ng-app %}ng-app="newVehicle"{% endblock %}
+
+{% block title %}Post Your Car - {{ block.super }}{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+    <link href="{{ STATIC_URL }}libs/blueimp/css/jquery.fileupload-ui.css" rel="stylesheet" />
+    <link href="{{ STATIC_URL }}apps/vehicle/css/new.css" rel="stylesheet" />
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{{ STATIC_URL }}libs/jquery-ui/js/jquery-ui-1.9.0.custom.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}libs/blueimp/js/tmpl.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}libs/blueimp/js/load-image.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}libs/blueimp/js/canvas-to-blob.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}libs/blueimp/js/jquery.iframe-transport.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}libs/blueimp/js/jquery.fileupload.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}libs/blueimp/js/jquery.fileupload-fp.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}libs/blueimp/js/jquery.fileupload-ui.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/vehicle/js/services/model-lookup.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/vehicle/js/services/posts.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/vehicle/js/filters/filters.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/vehicle/js/directives/new-vehicle.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/vehicle/js/controllers/new-vehicle.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/vehicle/js/app.js"></script>
+{% endblock %}
+
+
+{% block content %}
+
+    <div ng-view></div>
+
+    <div ng-controller="ModelSuggestionCtrl">
+        <!-- Model suggestion MODAL from bootstrap starts here -->
+        <div class="modal hide fade" id="model-suggest" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <form method="POST" id="vehicle-model-lookup-suggest">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="myModalLabel">{% trans 'Missing your vehicle model?' %}</h3>
+                </div>
+                <div class="modal-body">
+                    {% for field in model_lookup_i18n_form %}
+                        <div class="control-group {% if field.errors %}error{% endif %}">
+                            {{ field.label_tag|add_class:'control-label' }}
+                            <div class="controls">
+                                {{ field }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    {% for field in model_lookup_form.all_required_fields %}
+                        <div class="control-group  {% if field.errors %}error{% endif %}">
+                            {{ field.label_tag|add_class:'control-label' }}
+                            <div class="controls">
+                                {{ field }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <h2>{% trans 'Optional fields' %}</h2>
+                    <hr />
+                    {% for field in model_lookup_form.all_optional_fields %}
+                        <div class="control-group buff-paddings float-left {% if field.errors %}error{% endif %}">
+                            {{ field.label_tag|add_class:'control-label' }}
+                            <div class="controls">
+                                {{ field }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">{% trans 'Close' %}</button>
+                    <button class="btn btn-primary" name="save" ng-click="save()">{% trans 'Save and continue' %}</button>
+                </div>
+            </form>
+        </div>
+        <!-- Model suggestion MODAL from bootstrap ends here -->
+    </div>
+
+    <div class="page-header">
+        <h1>{% trans 'Sell your car' %} <small>{% trans 'and get exposure.' %}</small></h1>
+    </div>
+
+    <div class="ajax-error-handler alert alert-error hide"></div>
+    <div class="ajax-info-handler alert hide"></div>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            <a class="close" data-dismiss="alert" href="#">&times;</a>
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div ng-controller="NewVehicleCtrl">
+
+        <div ng-switch="!!errors">
+            <div ng-switch-when="true">
+                <div class="alert alert-error">
+                    <a class="close" data-dismiss="alert" href="#">&times;</a>
+                    <ul>
+                        <li ng-repeat="(field, error) in errors">{% ng error[0] %}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <form name="form" enctype="multipart/form-data" class="form-vertical" id="vehicle-new-form">
+            {# Include the hidden fields #}
+            {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+
+            {% csrf_token %}
+
+            <div class="row">
+                <div class="span4" id="step1">
+
+                    <h3>{% trans 'Step 1' %} <small>{% trans 'Model details' %}</small></h3>
+                    <hr />
+
+                    <fieldset>
+
+                        <div class="control-group {% if form.model.errors %}error{% endif %}">
+                            {{ form.model.label_tag|add_class:'control-label' }}
+                            <div class="controls">
+                                {{ form.model }}
+                            </div>
+                            <span class="help-block">{{ form.model.help_text }}</span>
+                        </div>
+
+                    </fieldset>
+
+                    <small>{% trans 'Cannot find your model? click ' %}<a href="#model-suggest" role="button" data-toggle="modal">{% trans 'here' %}</a>{% trans ' to suggest one.' %}</small>
+
+                </div>
+
+                <div class="span4" id="step2">
+                    <h3>{% trans 'Step 2' %} <small>{% trans 'Car details' %}</small></h3>
+                    <hr />
+
+                    <div class="control-group {% if form.description.errors %}error{% endif %}">
+                        {{ form.description.label_tag|add_class:'control-label' }}
+                        <div class="controls">
+                            {{ form.description }}
+                        </div>
+                        <span class="help-block">{{ form.description.help_text }}</span>
+                    </div>
+
+                    <div class="control-group {% if form.condition.errors %}error{% endif %}">
+                        {{ form.condition.label_tag|add_class:'control-label' }}
+                        <div class="controls">
+                            {{ form.condition }}
+                        </div>
+                        <span class="help-block">{{ form.condition.help_text }}</span>
+                    </div>
+
+                    <div class="control-group {% if form.mileage.errors %}error{% endif %}">
+                        {{ form.mileage.label_tag|add_class:'control-label' }}
+                        <div class="controls">
+                            <div class="input-prepend">
+                                <span class="add-on">KM&nbsp;&nbsp;</span>{{ form.mileage }}
+                            </div>
+                        </div>
+                        <span class="help-block">{{ form.mileage.help_text }}</span>
+                    </div>
+
+                    <div class="control-group {% if form.asking_price.errors %}error{% endif %}">
+                        {{ form.asking_price.label_tag|add_class:'control-label' }}
+                        <div class="controls">
+                            <div class="input-prepend">
+                                <span class="add-on">KWD</span>{{ form.asking_price }}
+                            </div>
+                        </div>
+                        <span class="help-block">{{ form.asking_price.help_text }}</span>
+                    </div>
+
+                    <div class="control-group {% if form.color.errors %}error{% endif %}">
+                        {{ form.color.label_tag|add_class:'control-label' }}
+                        <div class="controls">
+                            {{ form.color }}
+                        </div>
+                        <span class="help-block">{{ form.color.help_text }}</span>
+                    </div>
+
+                </div>
+
+                <div class="span4" id="step3">
+
+                    {{ form.primary_image }}
+
+                    <div id="fileupload" fileupload>
+
+                        {% upload_js %}
+
+                        <h3>{% trans 'Step 3' %} <small>{% trans 'Upload images' %}</small></h3>
+                        <hr />
+
+                        <div class="row fileupload-buttonbar">
+                            <div class="span4">
+                                <!-- The fileinput-button span is used to style the file input field as button -->
+                                <span class="btn btn-primary btn-mini fileinput-button">
+                                    <i class="icon-plus icon-white"></i>
+                                    <span>Add files...</span>
+                                    <input type="file" name="files[]" multiple>
+                                </span>
+                                <button type="submit" class="btn btn-primary btn-mini start" id="jfile-upload-start-btn">
+                                    <i class="icon-upload icon-white"></i>
+                                    <span>Start upload</span>
+                                </button>
+                                <button type="button" class="btn btn-danger btn-mini delete">
+                                    <i class="icon-trash icon-white"></i>
+                                    <span>Delete</span>
+                                </button>
+                                <input type="checkbox" class="toggle">
+                            </div>
+                        </div>
+                        <!-- The loading indicator is shown during file processing -->
+                        <div class="fileupload-loading"></div>
+                        <br>
+                        <!-- The table listing the files available for upload/download -->
+                        <table role="presentation" class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <h3>{% trans 'Contact Information' %} <small>{% trans 'this will be shown to the public.' %}</small></h3>
+            <hr />
+            <div class="form-horizontal">
+                <div class="control-group {% if form.contact_email.errors %}error{% endif %}">
+                    {{ form.contact_email.label_tag|add_class:'control-label' }}
+                    <div class="controls">
+                        {{ form.contact_email }}
+                    </div>
+                    <span class="help-block">{{ form.contact_email.help_text }}</span>
+                </div>
+
+                <div class="control-group {% if form.contact_phone.errors %}error{% endif %}">
+                    {{ form.contact_phone.label_tag|add_class:'control-label' }}
+                    <div class="controls">
+                        {{ form.contact_phone }}
+                    </div>
+                    <span class="help-block">{{ form.contact_phone.help_text }}</span>
+                </div>
+            </div>
+
+            <div class="form-actions align-center">
+                    <button type="button" class="btn btn-primary btn-large" ng-click="save()" ng-disabled="form.$invalid">{% trans 'Publish' %}</button>
+            </div>
+
+        </form>
+    </div>
+
+{% endblock %}
+

@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% load i18n vehicle_utils angularjs humanize %}
+
+{% block ng-app %}ng-app="vehicleProfile"{% endblock %}
+
+{% block title %}{{ car.model.year|stringformat:"s " }}{{ car.get_model_display }} - {{ block.super }}{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{{ STATIC_URL }}apps/vehicle/css/style.css" type="text/css" />
+{% endblock %}
+
+{% block meta %}
+    <meta property="og:title" content="{{ car.get_model_display }}" />
+    <meta property="og:description" content="{{ car.description|default:'N/A' }}" />
+    <meta property="og:image" content="http://{{ request.META.HTTP_HOST }}{{ car.primary_image.thumbnail }}" />
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/vehicle/js/services/profile.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/vehicle/js/directives/profile.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/vehicle/js/controllers/profile.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/vehicle/js/app.js"></script>
+{% endblock %}
+
+{% block content %}
+
+    {# used for facebook share button #}
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=323444351095887";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+
+
+    <div ng-controller="ProfileCtrl">
+
+        {% if car.status == car.STATUS_DRAFT %}
+            <div class="alert">
+                <strong>{% trans 'Attention!' %}</strong> {% trans 'This car is a draft and not visible to the public.' %}
+            </div>
+        {% elif car.status == car.STATUS_PENDING %}
+            <div class="alert">
+                <strong>{% trans 'Attention!' %}</strong> {% trans 'This car is pending approval and not visible to the public.' %}
+            </div>
+        {% elif car.status == car.STATUS_SOLD %}
+            <div class="alert">
+                <strong>{% trans 'Attention!' %}</strong> {% trans 'This car has been sold.' %}
+            </div>
+        {% endif %}
+
+        <div class="row">
+
+            <div class="span8" id="profile-main-image">
+                {% if car.status == 'A' %}
+                <!-- AddThis Button BEGIN -->
+                <div class="addthis_toolbox addthis_default_style">
+                    <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+                    <a class="addthis_button_tweet"></a>
+                    <a class="addthis_button_linkedin_counter"></a>
+                    <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+                </div>
+                <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=undefined"></script>
+                <!-- AddThis Button END -->
+                {% endif %}
+                <h3>{{ car.get_model_display }}</h3>
+                <img ng-src="{% ng displayImage %}" alt="" />
+            </div>
+
+            <div class="span4">
+                <ul class="thumbnails" data-car-id="{{ car.id }}">
+                    <li class="span2" ng-repeat="image in images">
+                        <a class="thumbnail" href="#" ng-click="selectImage($index)">
+                            <img ng-src="{% ng image.thumbnail %}" alt="" />
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="infobox">
+                    <dl>
+                        <dt>{% trans 'Year' %}</dt>
+                        <dd>{{ car.model.year|default:'N/A' }}</dd>
+                        <dt>{% trans 'Mileage' %}</dt>
+                        <dd>{{ car.mileage|intcomma|default_if_none:'N/A' }} {% trans 'KM' %}</dd>
+                        <dt>{% trans 'Price' %}</dt>
+                        {% if car.asking_price %}
+                        <dd>{{ car.asking_price|intcomma|default_if_none:'N/A' }} {% trans 'KWD' %}</dd>
+                        {% else %}
+                        <dd>N/A</dd>
+                        {% endif %}
+                        <dt>{% trans 'Color' %}</dt>
+                        <dd>{{ car.color|default:'N/A' }}</dd>
+
+                        {% if car.description %}
+                            <dt>{% trans 'Description' %}</dt>
+                            <dd>{{ car.description|default:'N/A' }}</dd>
+                        {% endif %}
+
+                        {% if car.contact_email or car.contact_phone %}
+                            <hr />
+                            {% if car.contact_email %}
+                                <dt>{% trans 'Email' %}</dt>
+                                <dd>{{ car.contact_email }}</dd>
+                            {% endif %}
+                            {% if car.contact_phone %}
+                                <dt>{% trans 'Phone' %}</dt>
+                                <dd>{{ car.contact_phone }}</dd>
+                            {% endif %}
+                        {% endif %}
+                    </dl>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock %}
+

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load i18n user_utils %}
+
+{% block ng-app %}ng-app="profile"{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/accounts/js/services.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/accounts/js/controllers.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/accounts/js/directives.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/accounts/js/app.js"></script>
+{% endblock %}
+
+
+
+{% block content %}
+
+    <div class="row">
+
+        <div class="span2">
+            {% get_user_sidebar user request.get_full_url %}
+        </div>
+
+        <div class="span10">
+
+            {% block profile_page_content %}
+
+            {% endblock %}
+
+        </div>
+
+    </div>
+
+{% endblock %}
+

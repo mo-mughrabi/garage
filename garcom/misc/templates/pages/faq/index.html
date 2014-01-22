@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load i18n  %}
+
+{% block ng-app %}ng-app="garage"{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/vehicle/js/app.js"></script>
+{% endblock %}
+
+{% block title %}FAQ - {{ block.super }}{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="span3">
+
+            <ul class="nav nav-pills nav-stacked">
+            {% for category in categories %}
+                <li><a href="#{{ category.name }}">{{ category.name|capfirst }}</a></li>
+            {% endfor %}
+            </ul>
+
+        </div>
+        <div class="span9">
+            {% regroup faqs by category.name as faq_list %}
+
+            {% for faq in faq_list %}
+                <h2><a name="{{ faq.grouper }}">{{ faq.grouper|capfirst }}</a></h2>
+                {% for f in faq.list %}
+                    <h3>{{ f.question }}</h3>
+                    <p>
+                        {{ f.answer }}
+                    </p>
+                {% endfor %}
+            {% endfor %}
+
+
+        </div>
+    </div>
+
+
+{% endblock %}
+

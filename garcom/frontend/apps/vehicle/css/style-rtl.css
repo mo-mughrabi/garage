@@ -1,0 +1,105 @@
+.year-dropdown {
+    width: 103px;
+}
+
+.price-textbox,
+.mileage-textbox {
+    width: 89px;
+}
+
+.vehiclepost {
+    display: block;
+    float: right;
+    margin-top: -5px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    padding: 5px;
+}
+
+.vehiclepost .car-thumbnail {
+    min-width: 160px;
+    float: right;
+}
+
+.vehiclepost .infobox {
+    float: right;
+    padding-right: 5px;
+    clear:left;
+}
+
+.vehiclepost .infobox .title {
+    margin: 0px;
+    clear:left;
+}
+
+.vehiclepost .infobox .title a {
+    text-decoration: none;
+}
+
+.vehiclepost .infobox .title a:hover {
+    text-decoration: underline;
+}
+
+.vehiclepost .infobox dl {
+    margin-top: 5px;
+}
+
+.vehiclepost .infobox dl dt {
+    float:right;
+    clear:right;
+    width:80px;
+    text-align:left;
+}
+
+.vehiclepost .infobox dl dd {
+    margin-right:90px;
+}
+
+.min-height-container {
+    min-height: 750px;
+}
+
+#header-seperator hr {
+    /*color: #29A3CC;
+    background-color: #29A3CC;*/
+    height: 2px;
+    margin-top: 0px;
+    margin-bottom: 2px;
+}
+
+.imagebox iframe {
+    margin: 3px 0px;
+}
+
+.thumbnailsbox {
+    border-top: 1px solid #ccc;
+    padding-top: 5px;
+}
+
+.infobox dl dt {
+    float:right;
+    clear:right;
+    width:80px;
+    text-align:left;
+}
+
+.infobox dl dd {
+    margin-left:90px;
+}
+
+.affix-top {
+    position: fixed;
+    top: 20px;
+    left: 0px;
+}
+
+/* Tablet
+------------------------- */
+@media (max-width: 767px) {
+    #browse {
+        position: static;
+        width: auto;
+        top: 0;
+    }
+}

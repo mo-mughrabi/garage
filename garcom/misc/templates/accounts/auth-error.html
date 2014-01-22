@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load add_class i18n %}
+
+{% block ng-app %}ng-app="register"{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/accounts/js/app.js"></script>
+{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+{% endblock %}
+
+
+
+{% block content %}
+    <div class="row">
+        <div class="span12">
+            <div class="hero-unit">
+
+                <h1>{% trans 'Error!' %}</h1>
+                <p>{% trans 'Something went wrong while using open authentication.' %}</p>
+                <p>
+                <a href="{% url vehicle-index %}" class="btn btn-primary btn-large">
+                    {% trans 'Go back to home' %}
+                </a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

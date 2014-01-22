@@ -1,0 +1,149 @@
+[
+    {
+        "pk": 1,
+        "model": "pages.faqcategorytranslation",
+        "fields": {
+            "master": 1,
+            "name": "vehicle",
+            "language_code": "en"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "pages.faqcategorytranslation",
+        "fields": {
+            "master": 2,
+            "name": "support",
+            "language_code": "en"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "pages.faqcategorytranslation",
+        "fields": {
+            "master": 3,
+            "name": "vechile services",
+            "language_code": "en"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "pages.faqcategory",
+        "fields": {
+            "is_active": true,
+            "slug": "vehicle"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "pages.faqcategory",
+        "fields": {
+            "is_active": true,
+            "slug": "support"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "pages.faqcategory",
+        "fields": {
+            "is_active": true,
+            "slug": "vehcile-services"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "pages.faqtranslation",
+        "fields": {
+            "answer": "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum ",
+            "master": 1,
+            "question": "how to create a new post?",
+            "language_code": "en"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "pages.faqtranslation",
+        "fields": {
+            "answer": "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum ",
+            "master": 2,
+            "question": "How can i add a new model?",
+            "language_code": "en"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "pages.faqtranslation",
+        "fields": {
+            "answer": "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum ",
+            "master": 3,
+            "question": "Why should I use garage?",
+            "language_code": "en"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "pages.faqtranslation",
+        "fields": {
+            "answer": "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum ",
+            "master": 4,
+            "question": "Where can i service my vehcile?",
+            "language_code": "en"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "pages.faq",
+        "fields": {
+            "category": 1,
+            "view_count": null,
+            "related_questions": [],
+            "created_at": null,
+            "is_active": true,
+            "updated_at": "2012-10-29T19:46:04Z",
+            "published_at": "2012-10-29T19:46:04Z",
+            "slug": "how-to-create-new-post"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "pages.faq",
+        "fields": {
+            "category": 1,
+            "view_count": null,
+            "related_questions": [],
+            "created_at": null,
+            "is_active": true,
+            "updated_at": "2012-10-29T19:46:28Z",
+            "published_at": "2012-10-29T19:46:28Z",
+            "slug": "how-to-add-new-model"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "pages.faq",
+        "fields": {
+            "category": 1,
+            "view_count": null,
+            "related_questions": [],
+            "created_at": null,
+            "is_active": false,
+            "updated_at": "2012-10-29T19:46:53Z",
+            "published_at": "2012-10-29T19:46:53Z",
+            "slug": "why-should-i-use-garage"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "pages.faq",
+        "fields": {
+            "category": 3,
+            "view_count": null,
+            "related_questions": [],
+            "created_at": null,
+            "is_active": true,
+            "updated_at": "2012-10-29T19:50:53Z",
+            "published_at": "2012-10-29T19:50:53Z",
+            "slug": "where-can-i-service-my-vehcile"
+        }
+    }
+]

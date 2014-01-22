@@ -1,0 +1,7 @@
+{% load i18n %}
+<ul class="nav nav-list">
+    <li><a href="{% url accounts-profile-my-vehicles %}"><i class="icon-list-alt"></i>{% trans 'My Vehicles' %}</a></li>
+    <li><a href="{% url accounts-profile-general %}"><i class="icon-user"></i>{% trans 'Profile' %}</a></li>
+{#    <li><a href="{% url accounts-profile-payment %}"><i class="icon-folder-open"></i>{% trans 'Payments' %}</a></li>#}
+    <li><a href="{% url accounts-profile-contacts %}"><i class="icon-book"></i>{% trans 'Contact phones' %}</a></li>
+</ul>

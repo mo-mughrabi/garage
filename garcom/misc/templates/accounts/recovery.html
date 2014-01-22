@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load add_class i18n %}
+
+{% block ng-app %}ng-app="recovery"{% endblock %}
+
+{% block title %}Account Recovery - {{ block.super }}{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/accounts/js/services.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/accounts/js/directives.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/accounts/js/controllers.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}apps/accounts/js/app.js"></script>
+{% endblock %}
+
+
+
+
+{% block content %}
+
+    <div class="row">
+        <div class="span8 offset2">
+            <div class="page-header">
+                <h1>{% trans 'Account recovery' %} <small>{% trans 'reset your password via email' %}</small></h1>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span6 offset3">
+
+        {% for message in messages %}
+            {% if message.tags == 'error' %}
+                <div class="alert alert-error">{{ message }}</div>
+            {% endif %}
+        {% endfor %}
+
+        <form class="form-horizontal" action="{% url accounts-recovery %}" method="post">
+            {% csrf_token %}
+
+            {% if form.errors %}
+                <div class="alert alert-error">
+                    <a class="close" data-dismiss="alert" href="#">&times;</a>
+                    {{ form.non_field_errors }}
+                    {% for field in form %}
+                        {{ field.errors }}
+                    {% endfor %}
+                </div>
+            {%endif%}
+
+            <fieldset>
+                <div class="control-group {% if form.email.errors %}error{% endif %}">
+                    {{ form.email.label_tag|add_class:'control-label' }}
+                    <div class="controls">
+                        {{ form.email|add_class:'input-xlarge' }}
+                    </div>
+                </div>
+
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">{% trans 'Reset' %}</button>
+                    <button type="submit" class="btn btn-danger">{% trans 'Clear' %}</button>
+                </div>
+
+
+            </fieldset>
+        </form>
+
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% load i18n %}
+{% trans 'Dear' %} {{ user }},
+<br />
+<br />
+<p>{% trans 'Your vehicle has been approved, below you will find details for your post:' %}</p>
+<br />
+{% trans 'Vehicle Type' %}: {{ model }}
+<br />
+{% trans 'Vehicle URL' %}: {{ protocol }}://{{ domain }}{{ get_absolute_url }}
+<br />
+<br />
+{% trans 'Thank you for using Garage' %}
+<br />
+{% trans 'Garage team' %}
+

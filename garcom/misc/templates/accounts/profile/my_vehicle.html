@@ -1,0 +1,123 @@
+{% extends "accounts/profile.html" %}
+{% load add_class i18n vehicle_utils angularjs %}
+
+
+{% block ng-app %}ng-app="my_vehicles"{% endblock %}
+
+{% block title %}Profile Vehicles - {{ block.super }}{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{{ STATIC_URL }}apps/accounts/css/style.css" type="text/css" />
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+{% endblock %}
+
+{% block profile_page_content %}
+
+
+        <div class="page-header">
+            <h1>{% trans 'My Vehicles' %} <small>{% trans 'maintain your vehicles.' %}</small></h1>
+        </div>
+
+        {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+
+        <a class="btn btn-large btn-primary btn-block btn-info post-your-car-btn" href="{% url vehicle-new %}">{% trans 'Post your car' %}</a>
+
+
+            <div ng-controller="MyVehicleController">
+
+
+                <div class="modal hide fade" id="delete-vehicle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel">{% ng delete_car_name %}</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>{% trans 'Are you sure you want to delete this vehicle?' %}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+                        <button class="btn btn-primary btn-danger" data-dismiss="modal" ng-click="delete()">Yes</button>
+                    </div>
+                </div>
+
+                <div ng-switch on="!!cars.length" >
+
+                    <div ng-switch-when="false">
+                        <div class="align-center">
+                            <h3>{% trans 'No vehicle found' %}</h3>
+                        </div>
+                    </div>
+
+
+                    <div ng-switch-when="true">
+                        <form>
+                            {% csrf_token %}
+                            <table class="table table-bordered table-hover" id="my-vehicles-table">
+                                <thead>
+                                <tr>
+
+                                    <th>{% trans 'Vehicle' %}</th>
+                                    <th>{% trans 'Date published' %}</th>
+                                    <th>{% trans 'Views' %}</th>
+                                    <th>{% trans 'Status' %}</th>
+                                    <th>{% trans 'Actions' %}</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="car in cars">
+                                    <td><a href="{% ng car.url %}">{% ng car.model_display.make_display %} {% ng car.model_display.model_display %} {% ng car.model_display.trim_display %}</a></td>
+                                    <td>{% ng car.created_at_format %}</td>
+                                    <td>{% ng car.view_count %}</td>
+                                    <td ng-model="car.status_label">{% ng car.status_label %}</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            {#<button ng-disabled="car.status == 'S' || car.status == 'P'" ng-model="edit" class="btn btn-mini edit-btn">{% trans 'Edit' %}</button>#}
+                                            <a href="#delete-vehicle" role="button" data-toggle="modal" ng-click="prepareDelete(car.id, $index)" ng-disabled="car.status == 'S'"  class="btn btn-mini delete-btn">
+                                                {% trans 'Delete' %}
+                                            </a>
+                                            <button ng-disabled="car.status == 'S' || car.status == 'P'" ng-click="mark_sold(car.id, $index)" class="btn btn-mini edit-btn">{% trans 'Mark as sold' %}</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </form>
+
+                        <!-- start ng switch for load more button -->
+                        <div ng-switch on="state" >
+                            <div ng-switch-when="loading">
+                                <div class="align-center">
+                                    <img src="{{ STATIC_URL }}apps/base/img/ajax-loader-blue-large.gif" alt="" />
+                                </div>
+                            </div>
+
+                            <div ng-switch-default>
+                                <div class="row align-center">
+                                    <a class="btn" ng-click="loadMore()" ng-show="next">{% trans 'Load More...' %}</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end ng switch for load more button -->
+
+
+                    </div>
+
+
+                    <div ng-switch-default>
+                        <p></p>
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- end of ng-controller="MyVehicleController" -->
+
+
+{% endblock %}
